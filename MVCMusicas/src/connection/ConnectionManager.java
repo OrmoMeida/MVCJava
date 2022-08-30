@@ -3,6 +3,7 @@ package connection;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.PreparedStatement;
 
 public class ConnectionManager {
     private Connection connection;
@@ -11,6 +12,7 @@ public class ConnectionManager {
     private ConnectionManager(String url, String user, String password) {
         try {
             this.connection = DriverManager.getConnection(url, user, password);
+            disableSafeMode();
         } catch (SQLException e) {
             System.out.println("Erro nas credenciais.");
             java.lang.System.exit(1);
@@ -26,5 +28,12 @@ public class ConnectionManager {
             connectionManager = new ConnectionManager();
 
         return connectionManager.connection;
+    }
+
+    private void disableSafeMode() throws SQLException {
+        PreparedStatement smt = connection.prepareStatement("SET SQL_SAFE_UPDATES = 0");
+        
+        smt.execute();
+        smt.close();
     }
 }

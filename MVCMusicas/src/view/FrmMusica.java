@@ -5,17 +5,90 @@
  */
 package view;
 
+import java.sql.SQLException;
+
+import javax.swing.JOptionPane;
+
+import control.MusicaControl;
+import model.Musica;
+
 /**
  *
  * @author aluno
  */
 public class FrmMusica extends javax.swing.JFrame {
+    private MusicaControl lstMusica;
 
     /**
      * Creates new form FrmMusica
      */
     public FrmMusica() {
         initComponents();
+        lstMusica = MusicaControl.getInstance();
+    }
+
+    private void limparCampos() {
+        txtNome.setText("");
+        txtAutor.setText("");
+        txtAlbum.setText("");
+        txtDuracao.setText("");
+        txtDataPub.setText("");
+        txtNome.requestFocus();
+    }
+
+    private void trimAll() {
+        txtNome.setText(txtNome.getText().trim());
+        txtAutor.setText(txtAutor.getText().trim());
+        txtAlbum.setText(txtAlbum.getText().trim());
+        txtDuracao.setText(txtDuracao.getText().trim());
+        txtDataPub.setText(txtDataPub.getText().trim());
+    }
+
+    private void checkCampos() {
+        trimAll();
+        String errMessage = "";
+
+        if (txtNome.getText().isEmpty()) {
+            errMessage = "O campo nome não pode estar vazio."; 
+            txtNome.requestFocus();
+        } else if (txtAutor.getText().isEmpty()) {
+            errMessage = "O campo autor não pode estar vazio.";
+            txtAutor.requestFocus();
+        } else if (txtAlbum.getText().isEmpty()) {
+            errMessage = "O campo álbum não pode estar vazio.";
+            txtAlbum.requestFocus();
+        } else if (txtDuracao.getText().isEmpty()) {
+            errMessage = "O campo duração não pode estar vazio.";
+            txtDuracao.requestFocus();
+        } else if (!Musica.durationCheck.matcher(txtDuracao.getText()).matches()) {
+            errMessage = "Formato de data incorreto: Deve estar como dd/MM/AAAA";
+            txtDuracao.requestFocus();
+        } else if (txtDataPub.getText().isEmpty()) {
+            errMessage = "O campo data de publicação não pode estar vazio.";
+            txtDataPub.requestFocus();
+        } else if (!Musica.dataCheck.matcher(txtDataPub.getText()).matches()) {
+            errMessage = "Formato de duração incorreto: Deve estar como MM:SS";
+            txtDataPub.requestFocus();
+        }
+
+        if (!errMessage.isEmpty())
+            JOptionPane.showMessageDialog(null, errMessage);
+    }
+
+    private void checkCamposRemover() {
+        trimAll();
+        String errMessage = "";
+
+        if (txtNome.getText().isEmpty()) {
+            errMessage = "O campo nome não pode estar vazio.\nAutor e nome são necessários para realizar a pesquisa."; 
+            txtNome.requestFocus();
+        } else if (txtAutor.getText().isEmpty()) {
+            errMessage = "O campo autor não pode estar vazio.\nAutor e nome são necessários para realizar a pesquisa.";
+            txtAutor.requestFocus();
+        }
+
+        if (!errMessage.isEmpty())
+            JOptionPane.showMessageDialog(null, errMessage);
     }
 
     /**
@@ -27,21 +100,141 @@ public class FrmMusica extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        txtNome = new javax.swing.JTextField();
+        txtAutor = new javax.swing.JTextField();
+        txtAlbum = new javax.swing.JTextField();
+        txtDuracao = new javax.swing.JTextField();
+        txtDataPub = new javax.swing.JTextField();
+        lblNome = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        lblAlbum = new javax.swing.JLabel();
+        lblDuracao = new javax.swing.JLabel();
+        lblDataPublicacao = new javax.swing.JLabel();
+        btnCadastrar = new javax.swing.JButton();
+        btnRemover = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        txtAlbum.setToolTipText("");
+
+        lblNome.setText("Nome");
+
+        jLabel1.setText("Autor");
+
+        lblAlbum.setText("Álbum");
+
+        lblDuracao.setText("Duração");
+
+        lblDataPublicacao.setText("Data Publicação");
+
+        btnCadastrar.setText("Cadastrar");
+        btnCadastrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCadastrarActionPerformed(evt);
+            }
+        });
+
+        btnRemover.setText("Remover");
+        btnRemover.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoverActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnRemover)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnCadastrar))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblNome, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1)
+                            .addComponent(lblAlbum, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblDuracao)
+                            .addComponent(lblDataPublicacao))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtDuracao)
+                            .addComponent(txtAutor)
+                            .addComponent(txtAlbum)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(txtDataPub))))
+                .addGap(96, 96, 96))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblNome))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtAutor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtAlbum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblAlbum, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtDuracao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblDuracao))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtDataPub, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblDataPublicacao))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnCadastrar)
+                    .addComponent(btnRemover))
+                .addContainerGap(111, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
+        checkCampos();
+
+        String nome    = txtNome.getText();
+        String album   = txtAlbum.getText();
+        String autor   = txtAutor.getText();
+        String duracao = txtDuracao.getText();
+        String dataPub = txtDataPub.getText();
+
+        try {
+            Musica e = new Musica(nome, album, autor, duracao, dataPub);
+            lstMusica.add(e);
+            limparCampos();
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Houve um erro no banco de dados :(" + e.getMessage());
+        }
+    }//GEN-LAST:event_btnCadastrarActionPerformed
+
+    private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
+        checkCamposRemover();
+
+        String nome = txtNome.getText();
+        String autor = txtAutor.getText();
+
+        try {
+            lstMusica.remove(nome, autor);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }//GEN-LAST:event_btnRemoverActionPerformed
 
     /**
      * @param args the command line arguments
@@ -79,5 +272,17 @@ public class FrmMusica extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCadastrar;
+    private javax.swing.JButton btnRemover;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel lblAlbum;
+    private javax.swing.JLabel lblDataPublicacao;
+    private javax.swing.JLabel lblDuracao;
+    private javax.swing.JLabel lblNome;
+    private javax.swing.JTextField txtAlbum;
+    private javax.swing.JTextField txtAutor;
+    private javax.swing.JTextField txtDataPub;
+    private javax.swing.JTextField txtDuracao;
+    private javax.swing.JTextField txtNome;
     // End of variables declaration//GEN-END:variables
 }
