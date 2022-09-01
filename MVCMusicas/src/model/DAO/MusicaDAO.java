@@ -43,16 +43,17 @@ public class MusicaDAO {
     }
 
     public void remove(String nome, String autor) throws SQLException, IllegalArgumentException {
+        PreparedStatement smtSafe = connection.prepareStatement("SET SQL_SAFE_UPDATES = 0");
+        smtSafe.execute();
+        smtSafe.close();
+
         PreparedStatement smt = connection.prepareStatement("DELETE FROM JMusica WHERE nome=? AND autor=?");
         
         smt.setString(1, nome);
         smt.setString(2, autor);
 
-        boolean res = smt.execute();
+        smt.execute();
         smt.close();
-
-        if (!res)
-            throw new IllegalArgumentException("Música não encontrada no banco de dados.");
     }
 
     public ArrayList<Musica> get() throws SQLException {

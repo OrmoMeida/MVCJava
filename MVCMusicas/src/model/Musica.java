@@ -11,7 +11,7 @@ public class Musica {
     private String dataPublicacao;
     public final static DateTimeFormatter dataFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     public final static Pattern dataCheck     = Pattern.compile("\\d{2}-([01][1-9|0])-\\d{4}");
-    public final static Pattern durationCheck = Pattern.compile("\\d{2}:\\d{2}");
+    public final static Pattern durationCheck = Pattern.compile("\\d{1,2}:\\d{1,2}");
 
     public Musica (String nome, String album, String autor, String duracao, String dataPublicacao) {
         setNome(nome);

@@ -29,7 +29,7 @@ public class FrmMusica extends javax.swing.JFrame {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
-        showStuff();
+        // showStuff();
     }
 
     private void limparCampos() {
@@ -49,7 +49,7 @@ public class FrmMusica extends javax.swing.JFrame {
         txtDataPub.setText(txtDataPub.getText().trim());
     }
 
-    private void checkCampos() {
+    private boolean checkCampos() {
         trimAll();
         String errMessage = "";
 
@@ -65,19 +65,21 @@ public class FrmMusica extends javax.swing.JFrame {
         } else if (txtDuracao.getText().isEmpty()) {
             errMessage = "O campo duração não pode estar vazio.";
             txtDuracao.requestFocus();
-        } else if (!Musica.durationCheck.matcher(txtDuracao.getText()).matches()) {
-            errMessage = "Formato de data incorreto: Deve estar como dd/MM/AAAA";
-            txtDuracao.requestFocus();
+        //} else if (!Musica.durationCheck.matcher(txtDuracao.getText()).matches()) {
+            // errMessage = "Formato de data incorreto: Deve estar como dd/MM/AAAA";
+            // txtDuracao.requestFocus();
         } else if (txtDataPub.getText().isEmpty()) {
             errMessage = "O campo data de publicação não pode estar vazio.";
             txtDataPub.requestFocus();
-        } else if (!Musica.dataCheck.matcher(txtDataPub.getText()).matches()) {
-            errMessage = "Formato de duração incorreto: Deve estar como MM:SS";
-            txtDataPub.requestFocus();
+        //} else if (!Musica.dataCheck.matcher(txtDataPub.getText()).matches()) {
+          //  errMessage = "Formato de duração incorreto: Deve estar como MM:SS";
+            // txtDataPub.requestFocus();
         }
 
         if (!errMessage.isEmpty())
             JOptionPane.showMessageDialog(null, errMessage);
+
+        return !errMessage.isEmpty();
     }
 
     private void checkCamposRemover() {
@@ -96,11 +98,11 @@ public class FrmMusica extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, errMessage);
     }
 
-    private void showStuff() {
-        for (Musica musica : lstMusica.getList()) {
-            JOptionPane.showMessageDialog(null, musica.toString(), "Música!", 1);
-        }
-    }
+    // private void showStuff() {
+    //     for (Musica musica : lstMusica.getList()) {
+    //         JOptionPane.showMessageDialog(null, musica.toString(), "Música!", 1);
+    //     }
+    // }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -215,7 +217,8 @@ public class FrmMusica extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
-        checkCampos();
+        if (checkCampos())
+            return;
 
         String nome    = txtNome.getText();
         String album   = txtAlbum.getText();
@@ -227,6 +230,7 @@ public class FrmMusica extends javax.swing.JFrame {
             Musica e = new Musica(nome, album, autor, duracao, dataPub);
             lstMusica.add(e);
             limparCampos();
+            JOptionPane.showMessageDialog(null, "A música \"" + e.getNome() + "\" foi inserida com sucesso.");
         } catch (IllegalArgumentException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         } catch (SQLException e) {
