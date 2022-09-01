@@ -76,4 +76,13 @@ public class Musica {
 
     	this.dataPublicacao = dataPublicacao;
     }
+
+    @Override
+    public String toString() {
+        return "Música:  " + this.getNome()
+                + "\t\nAutor:  " + this.getAutor()
+                + "\t\nÁlbum:  " + this.getAlbum()
+                + "\t\nDuração:  " + this.getDuracao()
+                + "\t\nPublicação:  " + this.getDataPublicacao();
+    }
 }

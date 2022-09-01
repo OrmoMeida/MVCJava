@@ -24,7 +24,12 @@ public class FrmMusica extends javax.swing.JFrame {
      */
     public FrmMusica() {
         initComponents();
-        lstMusica = MusicaControl.getInstance();
+        try {
+            lstMusica = MusicaControl.getInstance();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+        showStuff();
     }
 
     private void limparCampos() {
@@ -89,6 +94,12 @@ public class FrmMusica extends javax.swing.JFrame {
 
         if (!errMessage.isEmpty())
             JOptionPane.showMessageDialog(null, errMessage);
+    }
+
+    private void showStuff() {
+        for (Musica musica : lstMusica.getList()) {
+            JOptionPane.showMessageDialog(null, musica.toString(), "Música!", 1);
+        }
     }
 
     /**
