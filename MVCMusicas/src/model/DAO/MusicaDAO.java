@@ -2,7 +2,10 @@ package model.DAO;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
 import connection.ConnectionManager;
 import model.Musica;
 
@@ -50,5 +53,25 @@ public class MusicaDAO {
 
         if (!res)
             throw new IllegalArgumentException("Música não encontrada no banco de dados.");
+    }
+
+    public ArrayList<Musica> get() throws SQLException {
+        ArrayList<Musica> lstMusicas = new ArrayList<Musica>();
+
+        PreparedStatement smt = connection.prepareStatement("SELECT * FROM JMusica");
+        ResultSet rs = smt.executeQuery();
+
+        while (rs.next()) {
+            String nome    = rs.getString("nome");
+            String autor   = rs.getString("autor");
+            String album   = rs.getString("album");
+            String duracao = rs.getString("duracao");
+            String dataPb  = rs.getString("data_publicacao");
+            
+            lstMusicas.add(new Musica(nome, album, autor, duracao, dataPb));
+        }
+
+        smt.close();
+        return lstMusicas;
     }
 }

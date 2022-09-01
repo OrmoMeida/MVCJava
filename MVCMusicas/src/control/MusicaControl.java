@@ -12,12 +12,12 @@ public class MusicaControl {
     private final MusicaDAO dao;
     private static MusicaControl musicaControl;
 
-    private MusicaControl() {
-        this.lstMusica = new ArrayList<Musica>();
+    private MusicaControl() throws SQLException {
         this.dao = MusicaDAO.getInstance();
+        fetch();
     }
 
-    public static MusicaControl getInstance() {
+    public static MusicaControl getInstance() throws SQLException {
         if (musicaControl == null)
             musicaControl = new MusicaControl();
         
@@ -48,5 +48,18 @@ public class MusicaControl {
     public void remove(String nome, String autor) throws MusicNotFoundException, SQLException {
         lstMusica.remove(find(nome, autor));
         dao.remove(nome, autor);
+    }
+
+    private void fetch() throws SQLException {
+        try {
+            this.lstMusica = dao.get();
+        } catch (SQLException e) {
+            this.lstMusica = new ArrayList<Musica>();
+            throw new SQLException("Erro: Impossível receber valores do banco de dados.");
+        }
+    }
+
+    public ArrayList<Musica> getList() {
+        return lstMusica;
     }
 }
