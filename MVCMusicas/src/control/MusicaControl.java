@@ -31,38 +31,16 @@ public class MusicaControl {
     }
 
     public Musica find(String nome, String autor) throws MusicNotFoundException, SQLException {
-        return findAll(nome, autor).get(0);
-    }
-
-    public ArrayList<Musica> findAll(String nome, String autor) throws MusicNotFoundException, SQLException {
         fetch();
-        ArrayList<Musica> lMusicas = new ArrayList<Musica>();
 
         for (Musica musica : lstMusica) {
             if (musica.getAutor().toLowerCase().startsWith(autor.toLowerCase())
                     && musica.getNome().toLowerCase().startsWith(nome.toLowerCase()))
-                lMusicas.add(musica);
-        }
-    
-        if (lMusicas.size() < 1)
-            throw new MusicNotFoundException();
-
-        return lMusicas;
-    }
-
-    /*
-    public Musica findPerf(String nome, String autor) throws MusicNotFoundException, SQLException {
-        fetch();
-        
-        for (Musica musica : lstMusica) {
-            if (musica.getAutor().equalsIgnoreCase(autor)
-                    && musica.getNome().equalsIgnoreCase(nome))
                 return musica;
         }
 
         throw new MusicNotFoundException();
     }
-    */
 
     public ArrayList<Musica> findByName(String nome) throws MusicNotFoundException, SQLException {
         fetch();
@@ -93,6 +71,20 @@ public class MusicaControl {
         else
             throw new MusicNotFoundException();
     }
+
+    /*
+    public Musica findPerf(String nome, String autor) throws MusicNotFoundException, SQLException {
+        fetch();
+        
+        for (Musica musica : lstMusica) {
+            if (musica.getAutor().equalsIgnoreCase(autor)
+                    && musica.getNome().equalsIgnoreCase(nome))
+                return musica;
+        }
+
+        throw new MusicNotFoundException();
+    }
+    */
 
     public void remove(String nome, String autor) throws MusicNotFoundException, SQLException {
         Musica musica = find(nome, autor);
