@@ -54,7 +54,10 @@ public class Musica {
     public void setDuracao(String duracao) throws IllegalArgumentException {
         duracao = isEmpty(duracao);
 
-        duracao = duracao.replaceAll("^\\d:\\d{1,2}$", "0" + duracao).replaceAll("^\\d{2}:\\d{1}$", duracao + "0");
+        if (duracao.length() < 5) {
+            duracao = duracao.replaceAll("^\\d:\\d{1,2}$", "0" + duracao);
+            duracao = duracao.replaceAll("^\\d{2}:\\d{1}$", duracao + "0");
+        }
 
         if (!duracao.matches("\\d{2}:\\d{2}"))
             throw new IllegalArgumentException("Formato de duração incorreto: Deve estar como MM:SS");
