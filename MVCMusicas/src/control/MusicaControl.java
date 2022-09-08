@@ -14,13 +14,14 @@ public class MusicaControl {
 
     private MusicaControl() throws SQLException {
         this.dao = MusicaDAO.getInstance();
+        this.lstMusica = new ArrayList<Musica>();
         fetch();
     }
 
     public static MusicaControl getInstance() throws SQLException {
         if (musicaControl == null)
             musicaControl = new MusicaControl();
-        
+
         return musicaControl;
     }
 
@@ -29,32 +30,58 @@ public class MusicaControl {
         lstMusica.add(e);
     }
 
-    public Musica find(String nome, String autor) throws MusicNotFoundException {
-        ArrayList<Musica> musicasAutor = new ArrayList<Musica>();
+    public Musica find(String nome, String autor) throws MusicNotFoundException, SQLException {
+        fetch();
 
         for (Musica musica : lstMusica) {
-            if (musica.getAutor().equals(nome))
-                musicasAutor.add(musica);
-        }
-
-        for (Musica musica : musicasAutor) {
-            if (musica.getNome().equals(nome))
+            if (musica.getAutor().toLowerCase().startsWith(autor.toLowerCase())
+                    && musica.getNome().toLowerCase().startsWith(nome.toLowerCase()))
                 return musica;
         }
 
         throw new MusicNotFoundException();
     }
 
+    public ArrayList<Musica> findByName(String nome) throws MusicNotFoundException, SQLException {
+        fetch();
+        ArrayList<Musica> lMusicas = new ArrayList<Musica>();
+
+        for (Musica musica : lstMusica) {
+            if (musica.getNome().toLowerCase().startsWith(nome.toLowerCase()))
+                lMusicas.add(musica);
+        }
+
+        if (lMusicas.size() > 0)
+            return lMusicas;
+        else
+            throw new MusicNotFoundException();
+    }
+
+    public ArrayList<Musica> findByAuthor(String autor) throws MusicNotFoundException, SQLException {
+        fetch();
+        ArrayList<Musica> lMusicas = new ArrayList<Musica>();
+
+        for (Musica musica : lstMusica) {
+            if (musica.getAutor().toLowerCase().startsWith(autor.toLowerCase()))
+                lMusicas.add(musica);
+        }
+
+        if (lMusicas.size() > 0)
+            return lMusicas;
+        else
+            throw new MusicNotFoundException();
+    }
+
     public void remove(String nome, String autor) throws MusicNotFoundException, SQLException {
-        lstMusica.remove(find(nome, autor));
-        dao.remove(nome, autor);
+        Musica musica = find(nome, autor);
+        lstMusica.remove(musica);
+        dao.remove(musica);
     }
 
     private void fetch() throws SQLException {
         try {
             this.lstMusica = dao.get();
         } catch (SQLException e) {
-            this.lstMusica = new ArrayList<Musica>();
             throw new SQLException("Erro: Impossível receber valores do banco de dados.");
         }
     }

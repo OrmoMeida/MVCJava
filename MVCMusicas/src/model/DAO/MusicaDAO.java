@@ -29,7 +29,8 @@ public class MusicaDAO {
     }
 
     public void add(Musica e) throws SQLException {
-        java.sql.PreparedStatement smt = connection.prepareStatement("INSERT INTO JMusica(nome, autor, album, duracao, data_publicacao) values (?, ?, ?, ?, ?)");
+        PreparedStatement smt = connection.prepareStatement(
+                "INSERT INTO JMusica(nome, autor, album, duracao, data_publicacao) values (?, ?, ?, ?, ?)");
 
         smt.setString(1, e.getNome());
         smt.setString(2, e.getAutor());
@@ -47,13 +48,17 @@ public class MusicaDAO {
         smtSafe.execute();
         smtSafe.close();
 
-        PreparedStatement smt = connection.prepareStatement("DELETE FROM JMusica WHERE nome=? AND autor=?");
-        
+        PreparedStatement smt = connection.prepareStatement("DELETE FROM JMusica WHERE nome=? AND autor=? LIMIT 1");
+
         smt.setString(1, nome);
         smt.setString(2, autor);
 
-        smt.execute();
+        smt.execute(); // setembro.
         smt.close();
+    }
+
+    public void remove(Musica e) throws SQLException {
+        remove(e.getNome(), e.getAutor());
     }
 
     public ArrayList<Musica> get() throws SQLException {
@@ -63,12 +68,12 @@ public class MusicaDAO {
         ResultSet rs = smt.executeQuery();
 
         while (rs.next()) {
-            String nome    = rs.getString("nome");
-            String autor   = rs.getString("autor");
-            String album   = rs.getString("album");
+            String nome = rs.getString("nome");
+            String autor = rs.getString("autor");
+            String album = rs.getString("album");
             String duracao = rs.getString("duracao");
-            String dataPb  = rs.getString("data_publicacao");
-            
+            String dataPb = rs.getString("data_publicacao");
+
             lstMusicas.add(new Musica(nome, album, autor, duracao, dataPb));
         }
 
