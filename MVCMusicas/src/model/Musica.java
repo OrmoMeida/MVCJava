@@ -1,17 +1,11 @@
 package model;
 
-import java.time.format.DateTimeFormatter;
-import java.util.regex.Pattern;
-
 public class Musica {
     private String nome;
     private String autor;
     private String album;
     private String duracao;
     private String dataPublicacao;
-    public final static DateTimeFormatter dataFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-    public final static Pattern dataCheck = Pattern.compile("\\d{2}-([01][1-9|0])-\\d{4}");
-    public final static Pattern durationCheck = Pattern.compile("\\d{1,2}:\\d{1,2}");
 
     public Musica(String nome, String album, String autor, String duracao, String dataPublicacao) {
         setNome(nome);
@@ -60,7 +54,7 @@ public class Musica {
     public void setDuracao(String duracao) throws IllegalArgumentException {
         duracao = isEmpty(duracao);
 
-        duracao = duracao.replaceAll("^\\d:\\d{1,2}$", "0" + duracao);
+        duracao = duracao.replaceAll("^\\d:\\d{1,2}$", "0" + duracao).replaceAll("^\\d{2}:\\d{1}$", duracao + "0");
 
         if (!duracao.matches("\\d{2}:\\d{2}"))
             throw new IllegalArgumentException("Formato de duração incorreto: Deve estar como MM:SS");
