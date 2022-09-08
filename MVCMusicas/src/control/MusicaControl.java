@@ -50,18 +50,6 @@ public class MusicaControl {
         return lMusicas;
     }
 
-    public Musica findPerf(String nome, String autor) throws MusicNotFoundException, SQLException {
-        fetch();
-        
-        for (Musica musica : lstMusica) {
-            if (musica.getAutor().equalsIgnoreCase(autor)
-                    && musica.getNome().equalsIgnoreCase(nome))
-                return musica;
-        }
-
-        throw new MusicNotFoundException();
-    }
-
     public ArrayList<Musica> findByName(String nome) throws MusicNotFoundException, SQLException {
         fetch();
         ArrayList<Musica> lMusicas = new ArrayList<Musica>();
