@@ -61,6 +61,12 @@ public class FrmMusica extends javax.swing.JFrame {
         txtNome.requestFocus();
     }
 
+    private void limparBusca() {
+        txtBuscaNome.setText("");
+        txtBuscaAutor.setText("");
+        txtBuscaNome.requestFocus();
+    }
+
     private void trimAll() {
         txtNome.setText(txtNome.getText().trim());
         txtAutor.setText(txtAutor.getText().trim());
@@ -74,22 +80,22 @@ public class FrmMusica extends javax.swing.JFrame {
         trimAll();
         String errMessage = "";
 
-        if (txtNome.getText().isEmpty()) {
+        if (txtNome.getText().isBlank()) {
             errMessage = "O campo nome não pode estar vazio.";
             txtNome.requestFocus();
-        } else if (txtAutor.getText().isEmpty()) {
+        } else if (txtAutor.getText().isBlank()) {
             errMessage = "O campo autor não pode estar vazio.";
             txtAutor.requestFocus();
-        } else if (txtAlbum.getText().isEmpty()) {
+        } else if (txtAlbum.getText().isBlank()) {
             errMessage = "O campo álbum não pode estar vazio.";
             txtAlbum.requestFocus();
-        } else if (txtDuracao.getText().isEmpty()) {
+        } else if (txtDuracao.getText().isBlank()) {
             errMessage = "O campo duração não pode estar vazio.";
             txtDuracao.requestFocus();
             // } else if (!Musica.durationCheck.matcher(txtDuracao.getText()).matches()) {
             // errMessage = "Formato de data incorreto: Deve estar como dd/MM/AAAA";
             // txtDuracao.requestFocus();
-        } else if (txtDataPub.getText().isEmpty()) {
+        } else if (txtDataPub.getText().isBlank()) {
             errMessage = "O campo data de publicação não pode estar vazio.";
             txtDataPub.requestFocus();
             // } else if (!Musica.dataCheck.matcher(txtDataPub.getText()).matches()) {
@@ -97,26 +103,30 @@ public class FrmMusica extends javax.swing.JFrame {
             // txtDataPub.requestFocus();
         }
 
-        if (!errMessage.isEmpty())
+        if (!errMessage.isBlank())
             JOptionPane.showMessageDialog(null, errMessage);
 
-        return !errMessage.isEmpty();
+        return !errMessage.isBlank();
     }
 
-    private void checkCamposRemover() {
+    private ArrayList<Musica> checkCamposBusca() throws SQLException, MusicNotFoundException {
         trimAll();
-        String errMessage = "";
-
-        if (txtBuscaNome.getText().isEmpty()) {
-            errMessage = "O campo nome não pode estar vazio.\nAutor e nome são necessários para realizar a pesquisa.";
+        
+        if (txtBuscaNome.getText().isBlank() && txtBuscaAutor.getText().isBlank()) {
             txtBuscaNome.requestFocus();
-        } else if (txtBuscaAutor.getText().isEmpty()) {
-            errMessage = "O campo autor não pode estar vazio.\nAutor e nome são necessários para realizar a pesquisa.";
-            txtBuscaAutor.requestFocus();
+            throw new IllegalArgumentException("Os campos nome e autor não podem estar vazios.");
         }
 
-        if (!errMessage.isEmpty())
-            JOptionPane.showMessageDialog(null, errMessage);
+        String nome = txtBuscaNome.getText();
+        String autor = txtBuscaAutor.getText();
+
+        if (!nome.isBlank() && autor.isBlank()) { // Nesse caso, fazer pesquisa por nome.
+            return lstMusica.findByName(nome);
+        } else if (nome.isBlank() && !autor.isBlank()) { // Nesse caso, fazer pesquisa por autor.
+            return lstMusica.findByAuthor(autor);
+        } else {
+            return lstMusica.findAll(nome, autor); // Nesse caso, fazer pesquisa por nome e autor.
+        }
     }
 
     private void fillTable(ArrayList<Musica> lMusicas) {
@@ -134,24 +144,43 @@ public class FrmMusica extends javax.swing.JFrame {
         }
 
         tableMusica.setModel(data);
+        // JOptionPane.showMessageDialog(null, "filled!");
     }
 
     private void fillTable() {
         fillTable(lstMusica.getList());
-    }
-
-    private void showMusica(Musica e) {
-        JOptionPane.showMessageDialog(null, e.toString(), "Musiquinha!", 1);
+        limparBusca();
     }
 
     private void showMusica(ArrayList<Musica> e) throws MusicNotFoundException {
-        if (e.size() == 1)
-            showMusica(e.get(0));
-        else if (e.size() > 1) {
-            fillTable(e);
-        } else {
+        if (e.size() < 1) {
+            limparBusca();
             throw new MusicNotFoundException();
         }
+        
+        txtBuscaNome.setText(e.get(0).getNome());
+        txtBuscaAutor.setText(e.get(0).getAutor());
+        fillTable(e);
+    }
+
+
+    private void showMusicaDisplay(Musica e) {
+        JOptionPane.showMessageDialog(null, e.toString(), "Musiquinha!", 1);
+    }
+
+    private void showMusicaDisplay(ArrayList<Musica> e) throws MusicNotFoundException {
+        showMusica(e);        
+        if (e.size() == 1)
+            showMusicaDisplay(e.get(0));
+    }
+
+    private boolean showMusicaRemove(ArrayList<Musica> e) throws MusicNotFoundException {
+        showMusica(e);
+        return e.size() == 1 ? showMusicaRemove(e.get(0)) : false;
+    }
+
+    private boolean showMusicaRemove(Musica e) {
+        return JOptionPane.showConfirmDialog(null, "Você deseja excluir essa música?\n\n" + e.toString()) == 0;
     }
 
     // private void showStuff() {
@@ -431,64 +460,24 @@ public class FrmMusica extends javax.swing.JFrame {
     }// GEN-LAST:event_btnCadastrarActionPerformed
 
     private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnRemoverActionPerformed
-        checkCamposRemover();
-
-        String nome = txtBuscaNome.getText();
-        String autor = txtBuscaAutor.getText();
-
         try {
-            lstMusica.find(nome, autor);
-            if (JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja excluir essa música?") == 0) {
-                JOptionPane.showMessageDialog(null, "Sim!");
-                lstMusica.remove(nome, autor);
-            } else {
-                txtBuscaAutor.requestFocus();
-            }
-        } catch (MusicNotFoundException e) {
-            btnBuscaActionPerformed(evt);
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Algo deu errado:  " + e.getMessage());
+            ArrayList<Musica> lMusicas = checkCamposBusca();
+            if (!showMusicaRemove(lMusicas))
+                return;
+            lstMusica.remove(lMusicas.get(0));
+            fillTable();
+            limparBusca();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
         }
-        fillTable();
     }// GEN-LAST:event_btnRemoverActionPerformed
 
     private void btnBuscaActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnBuscaActionPerformed
-        trimAll();
-
-        if (txtBuscaNome.getText().isEmpty() && txtBuscaAutor.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Por favor, preencha ao menos um dos campos para realizar a busca.");
-            txtBuscaNome.requestFocus();
-        } else if (!txtBuscaAutor.getText().isEmpty() && !txtBuscaNome.getText().isEmpty()) {
-            try {
-                showMusica(lstMusica.find(txtBuscaNome.getText(), txtBuscaAutor.getText()));
-            } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, "Algo deu errado:  " + e.getMessage());
-            } catch (MusicNotFoundException e) {
-                JOptionPane.showMessageDialog(null, "Essa música não foi encontrada.");
-                txtBuscaNome.requestFocus();
-            }
-        } else if (!txtBuscaNome.getText().isEmpty() && txtBuscaAutor.getText().isEmpty()) {
-            try {
-                try {
-                    showMusica(lstMusica.findByName(txtBuscaNome.getText()));
-                } catch (MusicNotFoundException e) {
-                    JOptionPane.showMessageDialog(null, "Nenhuma música com esse nome foi encontrada.");
-                    txtBuscaNome.requestFocus();
-                }
-            } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, "Algo deu errado:  " + e.getMessage());
-            }
-        } else if (txtBuscaNome.getText().isEmpty() && !txtBuscaAutor.getText().isEmpty()) {
-            try {
-                try {
-                    showMusica(lstMusica.findByAuthor(txtBuscaAutor.getText()));
-                } catch (MusicNotFoundException e) {
-                    JOptionPane.showMessageDialog(null, "Nenhuma música desse autor foi encontrada.");
-                    txtBuscaNome.requestFocus();
-                }
-            } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, "Algo deu errado:  " + e.getMessage());
-            }
+        try {
+            ArrayList<Musica> lMusicas = checkCamposBusca();
+            showMusicaDisplay(lMusicas);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }// GEN-LAST:event_btnBuscaActionPerformed
 
