@@ -95,9 +95,12 @@ public class MusicaControl {
     */
 
     public void remove(String nome, String autor) throws MusicNotFoundException, SQLException {
-        Musica musica = find(nome, autor);
-        lstMusica.remove(musica);
-        dao.remove(musica);
+        remove(find(nome, autor));
+    }
+    
+    public void remove(Musica e) throws MusicNotFoundException, SQLException {
+        lstMusica.remove(e);
+        dao.remove(e);
     }
 
     private void fetch() throws SQLException {
