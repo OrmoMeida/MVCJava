@@ -42,6 +42,7 @@ public class FrmMusica extends javax.swing.JFrame {
 
     private void initTable() {
         tableMusica.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        tableMusica.setColumnSelectionAllowed(false);
         DefaultTableModel data = new DefaultTableModel();
 
         data.setRowCount(0);
