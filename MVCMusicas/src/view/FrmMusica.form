@@ -28,34 +28,6 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="lblBuscaNome" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblAutor" alignment="0" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace min="-2" pref="74" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jScrollPane2" max="32767" attributes="0"/>
-                                  <Component id="txtBuscaAutor" max="32767" attributes="0"/>
-                              </Group>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="lblNome" min="-2" pref="64" max="-2" attributes="0"/>
-                                  <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblAlbum" min="-2" pref="54" max="-2" attributes="0"/>
-                                  <Component id="lblDuracao" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblDataPublicacao" alignment="0" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="txtDuracao" max="32767" attributes="0"/>
-                                  <Component id="txtAutor" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="txtAlbum" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="txtDataPub" max="32767" attributes="0"/>
-                                  <Component id="txtNome" pref="200" max="32767" attributes="0"/>
-                              </Group>
-                          </Group>
                           <Group type="102" alignment="1" attributes="0">
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
@@ -66,6 +38,27 @@
                                   </Group>
                                   <Component id="btnCadastrar" alignment="1" min="-2" max="-2" attributes="0"/>
                                   <Component id="btnFetch" alignment="1" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="lblNome" min="-2" pref="64" max="-2" attributes="0"/>
+                                  <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblAlbum" min="-2" pref="54" max="-2" attributes="0"/>
+                                  <Component id="lblDuracao" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblDataPublicacao" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblBuscaNome" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblAutor" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="txtAutor" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="txtAlbum" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="txtNome" pref="200" max="32767" attributes="0"/>
+                                  <Component id="txtBuscaNome" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="txtBuscaAutor" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="txtDuracao" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="txtDataPub" alignment="0" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -104,27 +97,27 @@
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="txtDuracao" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="lblDuracao" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtDuracao" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="txtDataPub" min="-2" max="-2" attributes="0"/>
-                          <Component id="lblDataPublicacao" min="-2" pref="28" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="lblDataPublicacao" alignment="3" min="-2" pref="28" max="-2" attributes="0"/>
+                          <Component id="txtDataPub" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="btnCadastrar" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="lblBusca" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="lblBuscaNome" max="32767" attributes="0"/>
-                          <Component id="jScrollPane2" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="lblBuscaNome" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
+                          <Component id="txtBuscaNome" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="lblAutor" max="32767" attributes="0"/>
-                          <Component id="txtBuscaAutor" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="lblAutor" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
+                          <Component id="txtBuscaAutor" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
@@ -150,10 +143,6 @@
       <Properties>
         <Property name="toolTipText" type="java.lang.String" value=""/>
       </Properties>
-    </Component>
-    <Component class="javax.swing.JTextField" name="txtDuracao">
-    </Component>
-    <Component class="javax.swing.JTextField" name="txtDataPub">
     </Component>
     <Component class="javax.swing.JLabel" name="lblNome">
       <Properties>
@@ -215,30 +204,9 @@
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tableMusicaMouseEntered"/>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tableMusicaMouseClicked"/>
+            <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tableMusicaKeyReleased"/>
           </Events>
-        </Component>
-      </SubComponents>
-    </Container>
-    <Container class="javax.swing.JScrollPane" name="jScrollPane2">
-      <AuxValues>
-        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
-      </AuxValues>
-
-      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-      <SubComponents>
-        <Component class="javax.swing.JTextPane" name="txtBuscaNome">
-        </Component>
-      </SubComponents>
-    </Container>
-    <Container class="javax.swing.JScrollPane" name="txtBuscaAutor">
-      <AuxValues>
-        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
-      </AuxValues>
-
-      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-      <SubComponents>
-        <Component class="javax.swing.JTextPane" name="txtBuscaAuthor">
         </Component>
       </SubComponents>
     </Container>
@@ -273,6 +241,17 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnFetchActionPerformed"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JTextField" name="txtBuscaNome">
+      <Properties>
+        <Property name="toolTipText" type="java.lang.String" value=""/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="txtBuscaAutor">
+    </Component>
+    <Component class="javax.swing.JFormattedTextField" name="txtDuracao">
+    </Component>
+    <Component class="javax.swing.JFormattedTextField" name="txtDataPub">
     </Component>
   </SubComponents>
 </Form>
