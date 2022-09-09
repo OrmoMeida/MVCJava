@@ -45,7 +45,7 @@ public class MusicaControl {
         }
     
         if (lMusicas.size() < 1)
-            throw new MusicNotFoundException();
+            throw new MusicNotFoundException(MusicNotFoundException.NotFound);
 
         return lMusicas;
     }
@@ -62,7 +62,7 @@ public class MusicaControl {
         if (lMusicas.size() > 0)
             return lMusicas;
         else
-            throw new MusicNotFoundException();
+            throw new MusicNotFoundException(MusicNotFoundException.NotFoundByName);
     }
 
     public ArrayList<Musica> findByAuthor(String autor) throws MusicNotFoundException, SQLException {
@@ -77,7 +77,7 @@ public class MusicaControl {
         if (lMusicas.size() > 0)
             return lMusicas;
         else
-            throw new MusicNotFoundException();
+            throw new MusicNotFoundException(MusicNotFoundException.NotFoundByAuthor);
     }
 
     /*
@@ -90,7 +90,7 @@ public class MusicaControl {
                 return musica;
         }
 
-        throw new MusicNotFoundException();
+        throw new MusicNotFoundException(MusicNotFoundException.NotFound);
     }
     */
 
