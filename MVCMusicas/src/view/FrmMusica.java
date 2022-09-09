@@ -15,6 +15,7 @@ import javax.swing.text.MaskFormatter;
 
 import control.MusicaControl;
 import model.Musica;
+import pExceptions.EmptyFieldException;
 import pExceptions.MusicNotFoundException;
 
 /**
@@ -76,56 +77,35 @@ public class FrmMusica extends javax.swing.JFrame {
         txtAlbum.setText(txtAlbum.getText().trim());
         txtDuracao.setText(txtDuracao.getText().trim());
         txtDataPub.setText(txtDataPub.getText().trim());
+        txtBuscaNome.setText(txtBuscaNome.getText());
         txtBuscaAutor.setText(txtBuscaAutor.getText().trim());
     }
 
     private boolean checkCampos() {
         trimAll();
-        String errMessage = "";
 
-        if (txtNome.getText().isBlank()) {
-            errMessage = "O campo nome não pode estar vazio.";
-            txtNome.requestFocus();
-        } else if (txtAutor.getText().isBlank()) {
-            errMessage = "O campo autor não pode estar vazio.";
-            txtAutor.requestFocus();
-        } else if (txtAlbum.getText().isBlank()) {
-            errMessage = "O campo álbum não pode estar vazio.";
-            txtAlbum.requestFocus();
-        } else if (txtDuracao.getText().isBlank()) {
-            errMessage = "O campo duração não pode estar vazio.";
-            txtDuracao.requestFocus();
-            // } else if (!Musica.durationCheck.matcher(txtDuracao.getText()).matches()) {
-            // errMessage = "Formato de data incorreto: Deve estar como dd/MM/AAAA";
-            // txtDuracao.requestFocus();
-        } else if (txtDataPub.getText().isBlank()) {
-            errMessage = "O campo data de publicação não pode estar vazio.";
-            txtDataPub.requestFocus();
-            // } else if (!Musica.dataCheck.matcher(txtDataPub.getText()).matches()) {
-            // errMessage = "Formato de duração incorreto: Deve estar como MM:SS";
-            // txtDataPub.requestFocus();
-        }
+        EmptyFieldException.checkComponent(txtNome, "nome");
+        EmptyFieldException.checkComponent(txtAutor, "autor");
+        EmptyFieldException.checkComponent(txtAlbum, "álbum");
+        EmptyFieldException.checkDuracao(txtDuracao);
+        EmptyFieldException.checkDataPub(txtDataPub);
 
-        if (!errMessage.isBlank())
-            JOptionPane.showMessageDialog(null, errMessage);
-
-        return !errMessage.isBlank();
+        return true;
     }
 
     private ArrayList<Musica> checkCamposBusca() throws SQLException, MusicNotFoundException {
         trimAll();
         
-        if (txtBuscaNome.getText().isBlank() && txtBuscaAutor.getText().isBlank()) {
-            txtBuscaNome.requestFocus();
-            throw new IllegalArgumentException("Os campos nome e autor não podem estar vazios.");
+        if (EmptyFieldException.isEmpty(txtBuscaNome) && EmptyFieldException.isEmpty(txtBuscaAutor)) {
+            EmptyFieldException.checkComponent(txtBuscaNome, "nome e autor");
         }
 
         String nome = txtBuscaNome.getText();
         String autor = txtBuscaAutor.getText();
 
-        if (!nome.isBlank() && autor.isBlank()) { // Nesse caso, fazer pesquisa por nome.
+        if (!nome.isEmpty() && autor.isEmpty()) { // Nesse caso, fazer pesquisa por nome.
             return lstMusica.findByName(nome);
-        } else if (nome.isBlank() && !autor.isBlank()) { // Nesse caso, fazer pesquisa por autor.
+        } else if (nome.isEmpty() && !autor.isEmpty()) { // Nesse caso, fazer pesquisa por autor.
             return lstMusica.findByAuthor(autor);
         } else {
             return lstMusica.findAll(nome, autor); // Nesse caso, fazer pesquisa por nome e autor.
@@ -158,7 +138,7 @@ public class FrmMusica extends javax.swing.JFrame {
     private void showMusica(ArrayList<Musica> e) throws MusicNotFoundException {
         if (e.size() < 1) {
             limparBusca();
-            throw new MusicNotFoundException();
+            throw new MusicNotFoundException(MusicNotFoundException.EmptySearchSet);
         }
         
         txtBuscaNome.setText(e.get(0).getNome());
@@ -424,8 +404,12 @@ public class FrmMusica extends javax.swing.JFrame {
     }
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCadastrarActionPerformed
-        if (checkCampos())
+        try {
+            checkCampos();
+        } catch (EmptyFieldException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
             return;
+        }
 
         String nome = txtNome.getText();
         String album = txtAlbum.getText();
@@ -439,10 +423,10 @@ public class FrmMusica extends javax.swing.JFrame {
             limparCampos();
             fillTable();
             JOptionPane.showMessageDialog(null, "A música \"" + e.getNome() + "\" foi inserida com sucesso.");
-        } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Houve um erro no banco de dados :(" + e.getMessage());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }// GEN-LAST:event_btnCadastrarActionPerformed
 
