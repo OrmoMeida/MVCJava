@@ -14,7 +14,7 @@ public class ConnectionManager {
             this.connection = DriverManager.getConnection(url, user, password);
             disableSafeMode();
         } catch (SQLException e) {
-            System.out.println("Erro nas credenciais.");
+            System.out.println("Erro nas credenciais." + e.getMessage());
             java.lang.System.exit(1);
         }
     }
