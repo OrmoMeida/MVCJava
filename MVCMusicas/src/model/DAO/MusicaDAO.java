@@ -61,11 +61,48 @@ public class MusicaDAO {
         remove(e.getNome(), e.getAutor());
     }
 
-    public ArrayList<Musica> get() throws SQLException {
-        ArrayList<Musica> lstMusicas = new ArrayList<Musica>();
-
+    public ArrayList<Musica> select() throws SQLException {
         PreparedStatement smt = connection.prepareStatement("SELECT * FROM JMusica");
         ResultSet rs = smt.executeQuery();
+        ArrayList<Musica> lMusicas = RSetToList(rs);
+        smt.close();
+
+        return lMusicas;
+    }
+
+    public ArrayList<Musica> selectByName(String name) throws SQLException {
+        PreparedStatement smt = connection.prepareStatement("SELECT * FROM JMusica WHERE LOWER(nome) LIKE ?");
+        smt.setString(1, name + "%");
+        ResultSet rs = smt.executeQuery();
+        ArrayList<Musica> lMusicas = RSetToList(rs);
+        smt.close();
+
+        return lMusicas;
+    }
+
+    public ArrayList<Musica> selectByAuthor(String author) throws SQLException {
+        PreparedStatement smt = connection.prepareStatement("SELECT * FROM JMusica WHERE LOWER(autor) LIKE ?");
+        smt.setString(1, author + "%");
+        ResultSet rs = smt.executeQuery();
+        ArrayList<Musica> lMusicas = RSetToList(rs);
+        smt.close();
+
+        return lMusicas;
+    }
+
+    public ArrayList<Musica> selectByAuthorANDName(String name, String author) throws SQLException {
+        PreparedStatement smt = connection.prepareStatement("SELECT * FROM JMusica WHERE LOWER(nome) LIKE ? AND LOWER(autor) LIKE ?");
+        smt.setString(1, name.toLowerCase() + "%");
+        smt.setString(2, author.toLowerCase() + "%");
+        ResultSet rs = smt.executeQuery();
+        ArrayList<Musica> lMusicas = RSetToList(rs);
+        
+        smt.close();
+        return lMusicas;
+    }
+
+    public static ArrayList<Musica> RSetToList(ResultSet rs) throws SQLException {
+        ArrayList<Musica> lstMusicas = new ArrayList<Musica>();
 
         while (rs.next()) {
             String nome = rs.getString("nome");
@@ -77,7 +114,7 @@ public class MusicaDAO {
             lstMusicas.add(new Musica(nome, album, autor, duracao, dataPb));
         }
 
-        smt.close();
+        rs.close();
         return lstMusicas;
     }
 }

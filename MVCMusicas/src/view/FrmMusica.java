@@ -131,7 +131,11 @@ public class FrmMusica extends javax.swing.JFrame {
     }
 
     private void fillTable() {
-        fillTable(lstMusica.getList());
+        try {
+            fillTable(lstMusica.getList());
+        } catch (SQLException e) {
+            JOptionPane.showInputDialog(null, "Erro no SQL: " + e.getMessage());
+        }
         limparBusca();
     }
 
